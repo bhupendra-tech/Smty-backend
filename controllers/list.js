@@ -9,7 +9,7 @@ const { BadRequestError, NotFoundError } = require("../errors");
 
 async function addSubject(req, res) {
   const { userId, subjectName } = req.body;
-  if ((!userId, !subjectName))
+  if (!userId || !subjectName)
     throw new BadRequestError("Invalid UserId or SubjectName");
   const subjectListObj = await SubjectList.findOneAndUpdate(
     { userId },
@@ -28,8 +28,8 @@ async function addSubject(req, res) {
       errorMsg: "",
     },
     subjectList: {
-      userId: subjectListObj.userId,
-      subjectList: subjectListObj.subjectList.map((obj) => {
+      userId: subjectListObj?.userId,
+      subjectList: subjectListObj?.subjectList?.map((obj) => {
         const { subjectName, _id } = obj;
         return { subjectName, subjectId: _id };
       }),
@@ -40,17 +40,17 @@ async function getSubjects(req, res) {
   const { userId } = req.body;
   if (!userId) throw new BadRequestError("Invalid UserId");
   const subjectListObj = await SubjectList.findOne({ userId });
-  if (!subjectListObj) {
-    throw new Error("Subjects Not found");
-  }
+  // if (!subjectListObj) {
+  //   throw new Error("Subjects Not found");
+  // }
   res.status(StatusCodes.OK).json({
     error: {
       error: false,
       errorMsg: "",
     },
     subjectList: {
-      userId: subjectListObj.userId,
-      subjectList: subjectListObj.subjectList.map((obj) => {
+      userId: subjectListObj?.userId,
+      subjectList: subjectListObj?.subjectList.map((obj) => {
         const { subjectName, _id } = obj;
         return { subjectName, subjectId: _id };
       }),
@@ -76,8 +76,8 @@ async function addChapter(req, res) {
       errorMsg: "",
     },
     chapterList: {
-      userId: chapterListObj.userId,
-      chapterList: chapterListObj.chapterList.map((obj) => {
+      userId: chapterListObj?.userId,
+      chapterList: chapterListObj?.chapterList.map((obj) => {
         const { chapterName, _id } = obj;
         return { chapterName, chapterId: _id };
       }),
@@ -88,17 +88,17 @@ async function getChapters(req, res) {
   const { subjectId } = req.body;
   if (!subjectId) throw new BadRequestError("Invalid SubjectId");
   const chapterListObj = await ChapterList.findOne({ subjectId });
-  if (!chapterListObj) {
-    throw new NotFoundError("Chapters Not found");
-  }
+  // if (!chapterListObj) {
+  //   throw new NotFoundError("Chapters Not found");
+  // }
   res.status(StatusCodes.OK).json({
     error: {
       error: false,
       errorMsg: "",
     },
     chapterList: {
-      userId: chapterListObj.userId,
-      chapterList: chapterListObj.chapterList.map((obj) => {
+      subjectId: chapterListObj?.subjectId,
+      chapterList: chapterListObj?.chapterList?.map((obj) => {
         const { chapterName, _id } = obj;
         return { chapterName, chapterId: _id };
       }),
@@ -128,8 +128,8 @@ async function addTopic(req, res) {
       errorMsg: "",
     },
     topicList: {
-      chapterId: topicListObj.chapterId,
-      topicList: topicListObj.topicList.map((obj) => {
+      chapterId: topicListObj?.chapterId,
+      topicList: topicListObj?.topicList.map((obj) => {
         const { topicName, _id, userEditorDocId } = obj;
         return { topicName, topicId: _id, userEditorDocId };
       }),
@@ -140,17 +140,17 @@ async function getTopics(req, res) {
   const { chapterId } = req.body;
   if (!chapterId) throw new BadRequestError("Invalid ChapterId");
   const topicListObj = await TopicList.findOne({ chapterId });
-  if (!topicListObj) {
-    throw new NotFoundError("Topics Not found");
-  }
+  // if (!topicListObj) {
+  //   throw new NotFoundError("Topics Not found");
+  // }
   res.status(StatusCodes.OK).json({
     error: {
       error: false,
       errorMsg: "",
     },
     topicList: {
-      chapterId: topicListObj.chapterId,
-      topicList: topicListObj.topicList.map((obj) => {
+      chapterId: topicListObj?.chapterId,
+      topicList: topicListObj?.topicList.map((obj) => {
         const { topicName, _id, userEditorDocId } = obj;
         return { topicName, topicId: _id, userEditorDocId };
       }),
